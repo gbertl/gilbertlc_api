@@ -3,7 +3,7 @@ from django.shortcuts import render
 from .models import Project
 
 def index(request):
-    projects = Project.objects.all()
+    projects = Project.objects.order_by('priority_order')
     data = list(projects.values())
 
 
