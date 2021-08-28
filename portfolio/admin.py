@@ -9,13 +9,17 @@ class ProjectScreenshotAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ['title', 'priority_order']
+    list_filter = ['categories']
 
     def get_ordering(self, request):
         return ['priority_order']
 
+class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'name': ('title',)}
+
 admin.site.register(Role)
 admin.site.register(Technology)
 admin.site.register(Screenshot)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectScreenshot, ProjectScreenshotAdmin)

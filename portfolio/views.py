@@ -1,6 +1,6 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
-from .models import Project
+from .models import Project, Category
 
 def index(request):
     projects = Project.objects.order_by('priority_order')
@@ -22,5 +22,11 @@ def index(request):
         data[index]['technologies'] = technologies
         data[index]['screenshots'] = screenshots
         data[index]['categories'] = categories
+
+    return JsonResponse(data, safe=False)
+
+def categories(request):
+    categories = Category.objects.all()
+    data = list(categories.values())
 
     return JsonResponse(data, safe=False)
