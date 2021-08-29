@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Role, Technology, Screenshot, Category, Project, ProjectScreenshot
+import os
 
 class ProjectScreenshotAdmin(admin.ModelAdmin):
     list_filter = ['project']
@@ -16,6 +17,8 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'name': ('title',)}
+
+admin.site.site_url = 'http://localhost:3000/' if (os.environ.get('DEBUG_VALUE') == 'True') else 'https://gilbertlc.com/'
 
 admin.site.register(Role)
 admin.site.register(Technology)
