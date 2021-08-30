@@ -26,7 +26,7 @@ def index(request):
     return JsonResponse(data, safe=False)
 
 def categories(request):
-    categories = Category.objects.all()
+    categories = Category.objects.order_by('id')
     data = list(categories.values())
 
     return JsonResponse(data, safe=False)
