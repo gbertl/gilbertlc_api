@@ -40,7 +40,7 @@ class Project(models.Model):
     technologies = models.ManyToManyField(Technology)
 
     live_preview = models.URLField(blank=True)
-    source_code = models.URLField()
+    source_code = models.URLField(blank=True)
 
     thumbnail = models.ImageField()
     screenshots = models.ManyToManyField(Screenshot, through='ProjectScreenshot')
