@@ -1,10 +1,12 @@
 from django.db import models
 
+
 class Role(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
+
 
 class Technology(models.Model):
     name = models.CharField(max_length=50)
@@ -12,24 +14,27 @@ class Technology(models.Model):
     def __str__(self):
         return self.name
 
-    class Meta():
+    class Meta:
         verbose_name_plural = 'technologies'
+
 
 class Screenshot(models.Model):
     image = models.ImageField()
 
     def __str__(self):
-        return f'{self.image}'
+        return self.image.url
+
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
     name = models.SlugField(unique=True)
 
     def __str__(self):
-        return self.title
+        return self.name
 
-    class Meta():
+    class Meta:
         verbose_name_plural = 'categories'
+
 
 class Project(models.Model):
     title = models.CharField(max_length=50)
@@ -57,6 +62,7 @@ class Project(models.Model):
             self.priority_order = Project.objects.count() + 1
 
         super().save(*args, **kwargs)
+
 
 class ProjectScreenshot(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
