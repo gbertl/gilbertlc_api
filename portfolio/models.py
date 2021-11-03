@@ -19,11 +19,21 @@ class Technology(models.Model):
 
 
 class Screenshot(models.Model):
+    class Meta:
+        ordering = ['priority_order']
+
     image = models.ImageField()
+    project = models.ForeignKey(
+        'Project',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='screenshots',
+        default='',
+    )
+    priority_order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.image.url
-
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -37,6 +47,9 @@ class Category(models.Model):
 
 
 class Project(models.Model):
+    class Meta:
+        ordering = ['priority_order']
+
     title = models.CharField(max_length=50)
     description = models.TextField()
     created = models.IntegerField()
@@ -48,7 +61,6 @@ class Project(models.Model):
     source_code = models.URLField(blank=True)
 
     thumbnail = models.ImageField()
-    screenshots = models.ManyToManyField(Screenshot, through='ProjectScreenshot')
 
     categories = models.ManyToManyField(Category)
 
@@ -60,21 +72,5 @@ class Project(models.Model):
     def save(self, *args, **kwargs):
         if not self.priority_order:
             self.priority_order = Project.objects.count() + 1
-
-        super().save(*args, **kwargs)
-
-
-class ProjectScreenshot(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    screenshot = models.ForeignKey(Screenshot, on_delete=models.CASCADE)
-    priority_order = models.IntegerField(blank=True, null=True)
-
-    def __str__(self):
-        return f'{self.project.title} - {self.screenshot.image} ({self.priority_order})'
-
-    def save(self, *args, **kwargs):
-        if not self.priority_order:
-            p = Project.objects.get(pk=self.project_id)
-            self.priority_order = p.screenshots.count() + 1
 
         super().save(*args, **kwargs)
