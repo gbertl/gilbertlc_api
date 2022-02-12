@@ -38,6 +38,7 @@ class Screenshot(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=50)
     name = models.SlugField(unique=True)
+    priority_order = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.name

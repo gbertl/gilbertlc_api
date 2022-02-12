@@ -12,7 +12,11 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['title', 'priority_order']
     prepopulated_fields = {'name': ('title',)}
+
+    def get_ordering(self, request):
+        return ['priority_order']
 
 
 admin.site.site_url = (

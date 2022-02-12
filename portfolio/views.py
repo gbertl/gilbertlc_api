@@ -43,7 +43,7 @@ def project_detail(request, pk):
 
 @api_view()
 def categories(request):
-    categories = Category.objects.order_by('id')
+    categories = Category.objects.order_by('priority_order')
     serializer = CategorySerializer(categories, many=True)
 
     return Response(serializer.data)
