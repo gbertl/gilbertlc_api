@@ -61,8 +61,6 @@ class Project(models.Model):
     live_preview = models.URLField(blank=True)
     source_code = models.URLField(blank=True)
 
-    thumbnail = models.ImageField()
-
     categories = models.ManyToManyField(Category)
 
     priority_order = models.IntegerField(blank=True, null=True)

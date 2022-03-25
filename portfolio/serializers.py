@@ -66,13 +66,9 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
-        extra_kwargs = {'thumbnail': {'required': False}}
 
     def to_internal_value(self, data):
         if self.instance:
-            if not hasattr(data.get('thumbnail'), 'read'):
-                data.pop('thumbnail')
-
             # convert {'[]': ''} (which means empty array) to []
             # supports 1 depth
             for k in data.keys():
@@ -81,11 +77,6 @@ class ProjectSerializer(serializers.ModelSerializer):
                         data[k] = []
                 except (KeyError, TypeError):
                     pass
-        else:
-            if not data.get('thumbnail'):
-                raise serializers.ValidationError(
-                    {'thumbnail': 'No file was submitted.'}
-                )
 
         return super().to_internal_value(data)
 
