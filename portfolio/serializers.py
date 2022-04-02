@@ -1,13 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Category, Role, Screenshot, Technology
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False)
-
-    class Meta:
-        model = Role
-        fields = '__all__'
+from .models import Project, Category, Screenshot, Technology
 
 
 class TechnologySerializer(serializers.ModelSerializer):
@@ -58,7 +50,6 @@ class ScreenshotSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    roles = RoleSerializer(many=True)
     technologies = TechnologySerializer(many=True)
     categories = CategorySerializer(many=True)
     screenshots = ScreenshotSerializer(many=True)
@@ -93,14 +84,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         m2m.set(objs)
 
     def update(self, instance, validated_data):
-        roles_data = validated_data.pop('roles', None)
         technologies_data = validated_data.pop('technologies', None)
         categories_data = validated_data.pop('categories', None)
         screenshots_data = validated_data.pop('screenshots', None)
 
         instance = super().update(instance, validated_data)
 
-        self.update_or_create_m2m(Role, instance.roles, roles_data)
         self.update_or_create_m2m(Technology, instance.technologies, technologies_data)
         self.update_or_create_m2m(Category, instance.categories, categories_data)
 
@@ -113,7 +102,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProjectReadSerializer(ProjectSerializer):
-    roles = serializers.StringRelatedField(many=True)
     technologies = serializers.StringRelatedField(many=True)
     categories = serializers.StringRelatedField(many=True)
     screenshots = serializers.StringRelatedField(many=True)

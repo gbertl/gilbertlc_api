@@ -9,11 +9,10 @@ from portfolio.serializers import (
     CategorySerializer,
     ProjectReadSerializer,
     ProjectSerializer,
-    RoleSerializer,
     ScreenshotSerializer,
     TechnologySerializer,
 )
-from .models import Project, Category, Role, Screenshot, Technology
+from .models import Project, Category, Screenshot, Technology
 
 
 @api_view()
@@ -46,13 +45,6 @@ def categories(request):
     categories = Category.objects.order_by('priority_order')
     serializer = CategorySerializer(categories, many=True)
 
-    return Response(serializer.data)
-
-
-@api_view()
-def role_list(request):
-    queryset = Role.objects.all()
-    serializer = RoleSerializer(queryset, many=True)
     return Response(serializer.data)
 
 

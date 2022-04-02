@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Role, Technology, Screenshot, Category, Project
+from .models import Technology, Screenshot, Category, Project
 import os
 
 
@@ -25,7 +25,6 @@ admin.site.site_url = (
     else 'https://gilbertlc.com/'
 )
 
-admin.site.register(Role)
 admin.site.register(Technology)
 admin.site.register(Screenshot)
 admin.site.register(Category, CategoryAdmin)

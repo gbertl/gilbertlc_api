@@ -1,13 +1,6 @@
 from django.db import models
 
 
-class Role(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 class Technology(models.Model):
     name = models.CharField(max_length=50)
 
@@ -53,8 +46,6 @@ class Project(models.Model):
 
     title = models.CharField(max_length=50)
     description = models.TextField()
-    created = models.IntegerField()
-    roles = models.ManyToManyField(Role)
 
     technologies = models.ManyToManyField(Technology)
 
