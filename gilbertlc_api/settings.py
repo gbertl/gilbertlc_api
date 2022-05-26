@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'portfolio',
     'storages',
     'rest_framework',
+    'graphene_django'
 ]
 
 MIDDLEWARE = [
@@ -152,6 +153,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+GRAPHENE = {
+    "SCHEMA": "gilbertlc_api.schema.schema"
 }
 
 # Configure Django App for Heroku.
