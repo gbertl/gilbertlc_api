@@ -12,9 +12,6 @@ class Technology(models.Model):
 
 
 class Screenshot(models.Model):
-    class Meta:
-        ordering = ['priority_order']
-
     image = models.ImageField()
     project = models.ForeignKey(
         'Project',
@@ -41,19 +38,12 @@ class Category(models.Model):
 
 
 class Project(models.Model):
-    class Meta:
-        ordering = ['priority_order']
-
     title = models.CharField(max_length=50)
     description = models.TextField()
-
     technologies = models.ManyToManyField(Technology)
-
     live_preview = models.URLField(blank=True)
     source_code = models.URLField(blank=True)
-
     categories = models.ManyToManyField(Category)
-
     priority_order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
