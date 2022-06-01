@@ -8,22 +8,23 @@ class Technology(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'technologies'
+        verbose_name_plural = "technologies"
 
 
 class Screenshot(models.Model):
     image = models.ImageField()
     project = models.ForeignKey(
-        'Project',
+        "Project",
         on_delete=models.SET_NULL,
         null=True,
-        related_name='screenshots',
-        default='',
+        related_name="screenshots",
+        default="",
     )
     priority_order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.image.url
+
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -34,7 +35,7 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'categories'
+        verbose_name_plural = "categories"
 
 
 class Project(models.Model):
@@ -47,7 +48,7 @@ class Project(models.Model):
     priority_order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.title}'
+        return f"{self.title}"
 
     def save(self, *args, **kwargs):
         if not self.priority_order:
