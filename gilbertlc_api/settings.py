@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'portfolio',
     'storages',
     'rest_framework',
-    'graphene_django'
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/files/'
 
-CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOWED_ORIGINS = [os.environ.get('CORS_ALLOWED_ORIGIN_URL')]
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
@@ -155,10 +154,9 @@ REST_FRAMEWORK = {
     )
 }
 
-GRAPHENE = {
-    "SCHEMA": "gilbertlc_api.schema.schema"
-}
+GRAPHENE = {"SCHEMA": "gilbertlc_api.schema.schema"}
 
 # Configure Django App for Heroku.
 import django_heroku
+
 django_heroku.settings(locals())
