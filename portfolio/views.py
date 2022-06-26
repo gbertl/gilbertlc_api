@@ -1,62 +1,30 @@
-from rest_framework.decorators import api_view, parser_classes, permission_classes
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django.shortcuts import get_object_or_404
-from rest_framework.parsers import FormParser
-from drf_nested_forms.parsers import NestedMultiPartParser
 
-from portfolio.serializers import (
-    CategorySerializer,
-    ProjectReadSerializer,
-    ProjectSerializer,
-    ScreenshotSerializer,
-    TechnologySerializer,
-)
-from .models import Project, Category, Screenshot, Technology
+from django.shortcuts import get_object_or_404
+from .models import Project
+from .serializers import ProjectSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 
 @api_view()
-def projects(request):
-    projects = Project.objects.order_by('priority_order')
-    serializer = ProjectReadSerializer(projects, many=True)
-
+def index(request):
+    queryset = Project.objects.all()
+    serializer = ProjectSerializer(queryset, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET', 'PUT'])
-@permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([NestedMultiPartParser, FormParser])
-def project_detail(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+def project_detail(request, id):
+    obj = get_object_or_404(Project, id=id)
 
     if request.method == 'GET':
-        serializer = ProjectSerializer(project)
+        serializer = ProjectSerializer(obj)
         return Response(serializer.data)
+
     elif request.method == 'PUT':
-        serializer = ProjectSerializer(project, data=request.data)
+        serializer = ProjectSerializer(obj, data=request.data)
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data)
-
-
-@api_view()
-def categories(request):
-    categories = Category.objects.order_by('priority_order')
-    serializer = CategorySerializer(categories, many=True)
-
-    return Response(serializer.data)
-
-
-@api_view()
-def technology_list(request):
-    queryset = Technology.objects.all()
-    serializer = TechnologySerializer(queryset, many=True)
-    return Response(serializer.data)
-
-
-@api_view()
-def screenshot_list(request):
-    queryset = Screenshot.objects.all()
-    serializer = ScreenshotSerializer(queryset, many=True)
-    return Response(serializer.data)
