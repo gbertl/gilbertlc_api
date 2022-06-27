@@ -135,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/files/'
 
-CORS_ALLOWED_ORIGINS = [os.environ.get('CORS_ALLOWED_ORIGIN_URL')]
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGIN_URL').split(',')
 
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
