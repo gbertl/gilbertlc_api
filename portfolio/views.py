@@ -14,7 +14,12 @@ from .permissions import IsSuperUserOrReadOnly
 
 @api_view()
 def project_list(request):
+    ordering = request.query_params.getlist('ordering[]')
     queryset = Project.objects.all()
+
+    if len(ordering):
+        queryset = Project.objects.order_by(*ordering)
+
     serializer = ProjectSerializer(queryset, many=True)
     return Response(serializer.data)
 
