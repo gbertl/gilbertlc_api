@@ -15,10 +15,8 @@ class Screenshot(models.Model):
     image = models.ImageField()
     project = models.ForeignKey(
         "Project",
-        on_delete=models.SET_NULL,
-        null=True,
+        on_delete=models.CASCADE,
         related_name="screenshots",
-        default="",
     )
     priority_order = models.IntegerField(blank=True, null=True)
 
