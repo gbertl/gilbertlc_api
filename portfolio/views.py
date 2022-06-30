@@ -46,16 +46,23 @@ def project_detail(request, id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@api_view()
+@api_view(['GET', 'POST'])
 def technology_list(request):
-    ids = request.query_params.getlist('ids[]')
-    queryset = Technology.objects.all()
+    if request.method == 'GET':
+        ids = request.query_params.getlist('ids[]')
+        queryset = Technology.objects.all()
 
-    if len(ids):
-        queryset = Technology.objects.filter(id__in=ids)
+        if len(ids):
+            queryset = Technology.objects.filter(id__in=ids)
 
-    serializer = TechnologySerializer(queryset, many=True)
-    return Response(serializer.data)
+        serializer = TechnologySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = TechnologySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view()
