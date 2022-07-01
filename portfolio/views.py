@@ -47,6 +47,7 @@ def project_detail(request, id):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsSuperUserOrReadOnly])
 def technology_list(request):
     if request.method == 'GET':
         ids = request.query_params.getlist('ids[]')
@@ -77,13 +78,21 @@ def category_list(request):
     return Response(serializer.data)
 
 
-@api_view()
+@api_view(['GET', 'POST'])
+@permission_classes([IsSuperUserOrReadOnly])
 def screenshot_list(request):
-    ids = request.query_params.getlist('ids[]')
-    queryset = Screenshot.objects.all()
+    if request.method == 'GET':
+        ids = request.query_params.getlist('ids[]')
+        queryset = Screenshot.objects.all()
 
-    if len(ids):
-        queryset = Screenshot.objects.filter(id__in=ids)
+        if len(ids):
+            queryset = Screenshot.objects.filter(id__in=ids)
 
-    serializer = ScreenshotSerializer(queryset, many=True)
-    return Response(serializer.data)
+        serializer = ScreenshotSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = ScreenshotSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
