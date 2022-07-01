@@ -132,8 +132,8 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = BASE_DIR / 'uploads'
-MEDIA_URL = '/files/'
+MEDIA_URL = '/m/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGIN_URL').split(',')
 
@@ -146,7 +146,8 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_S3_REGION_NAME = 'eu-central-1'
 AWS_S3_ADDRESSING_STYLE = 'virtual'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
