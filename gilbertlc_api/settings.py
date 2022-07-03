@@ -135,19 +135,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/m/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGIN_URL').split(',')
-
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-
-AWS_S3_FILE_OVERWRITE = False
-
-AWS_S3_REGION_NAME = 'eu-central-1'
-AWS_S3_ADDRESSING_STYLE = 'virtual'
-
 if not DEBUG:
+    CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGIN_URL').split(',')
+
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_S3_REGION_NAME = 'eu-central-1'
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
+
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
