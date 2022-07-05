@@ -25,6 +25,13 @@ class Screenshot(models.Model):
         return self.image.url
 
 
+    def save(self, *args, **kwargs):
+        if not self.priority_order:
+            self.priority_order = Screenshot.objects.count() + 1
+
+        super().save(*args, **kwargs)
+
+
 class Category(models.Model):
     title = models.CharField(max_length=50)
     name = models.SlugField(unique=True)
