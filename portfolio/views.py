@@ -7,9 +7,10 @@ from .serializers import (
     TechnologySerializer,
 )
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework import status
 from .permissions import IsSuperUserOrReadOnly
+from rest_framework.parsers import MultiPartParser
 
 
 @api_view()
@@ -80,6 +81,7 @@ def category_list(request):
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsSuperUserOrReadOnly])
+@parser_classes([MultiPartParser])
 def screenshot_list(request):
     if request.method == 'GET':
         ids = request.query_params.getlist('ids[]')
@@ -88,11 +90,15 @@ def screenshot_list(request):
         if len(ids):
             queryset = Screenshot.objects.filter(id__in=ids)
 
-        serializer = ScreenshotSerializer(queryset, many=True, context={'request': request})
+        serializer = ScreenshotSerializer(
+            queryset, many=True, context={'request': request}
+        )
         return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = ScreenshotSerializer(data=request.data, context={'request': request})
+        serializer = ScreenshotSerializer(
+            data=request.data, context={'request': request}
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
