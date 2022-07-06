@@ -14,20 +14,29 @@ class Technology(models.Model):
 class Screenshot(models.Model):
     image = models.ImageField()
     project = models.ForeignKey(
-        "Project",
-        on_delete=models.SET_NULL,
-        related_name="screenshots",
-        null=True
+        "Project", on_delete=models.SET_NULL, related_name="screenshots", null=True
     )
     priority_order = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.image.url
 
-
     def save(self, *args, **kwargs):
-        if not self.priority_order:
-            self.priority_order = Screenshot.objects.count() + 1
+        if self.project:
+            screenshots = Screenshot.objects.filter(project=self.project)
+            count = screenshots.count() + 1
+
+            if not self.priority_order:
+                self.priority_order = count
+            else:
+                try:
+                    screenshot = Screenshot.objects.get(
+                        project=self.project, priority_order=self.priority_order
+                    )
+                    screenshot.priority_order = count
+                    screenshot.save()
+                except Screenshot.DoesNotExist:
+                    pass
 
         super().save(*args, **kwargs)
 
