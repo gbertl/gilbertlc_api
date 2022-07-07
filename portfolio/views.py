@@ -85,14 +85,20 @@ def category_list(request):
 def screenshot_list(request):
     if request.method == 'GET':
         ids = request.query_params.getlist('ids[]')
+        ordering = request.query_params.getlist('ordering[]')
+
         queryset = Screenshot.objects.all()
 
         if len(ids):
-            queryset = Screenshot.objects.filter(id__in=ids)
+            queryset = queryset.filter(id__in=ids)
+
+        if len(ordering):
+            queryset = queryset.order_by(*ordering)
 
         serializer = ScreenshotSerializer(
             queryset, many=True, context={'request': request}
         )
+
         return Response(serializer.data)
 
     elif request.method == 'POST':
