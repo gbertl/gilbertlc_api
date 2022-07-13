@@ -13,16 +13,25 @@ from .permissions import IsSuperUserOrReadOnly
 from rest_framework.parsers import MultiPartParser
 
 
-@api_view()
+@api_view(['GET', 'POST'])
+@permission_classes([IsSuperUserOrReadOnly])
 def project_list(request):
-    ordering = request.query_params.getlist('ordering[]')
-    queryset = Project.objects.all()
+    if request.method == 'GET':
+        ordering = request.query_params.getlist('ordering[]')
+        queryset = Project.objects.all()
 
-    if len(ordering):
-        queryset = Project.objects.order_by(*ordering)
+        if len(ordering):
+            queryset = Project.objects.order_by(*ordering)
 
-    serializer = ProjectSerializer(queryset, many=True)
-    return Response(serializer.data)
+        serializer = ProjectSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        serializer = ProjectSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
